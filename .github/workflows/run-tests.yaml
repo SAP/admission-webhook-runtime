@@ -22,7 +22,6 @@ defaults:
 jobs:
   unit-and-integration-tests:
     runs-on: ubuntu-22.04
-    needs: check-generate
 
     steps:
     - name: Checkout
