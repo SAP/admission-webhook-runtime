@@ -126,7 +126,11 @@ Two sorts of webhooks are supported:
       resources:
       - "*"
     sideEffects: None
-  ```  
+  ```
+
+## Documentation
+
+The API reference is here: [https://pkg.go.dev/github.com/sap/admission-webhook-runtime](https://pkg.go.dev/github.com/sap/admission-webhook-runtime).
 
 ## Support, Feedback, Contributing
 
