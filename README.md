@@ -1,5 +1,7 @@
 # Kubernetes Admission Webhook Runtime
 
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP/admission-webhook-runtime)](https://api.reuse.software/info/github.com/SAP/admission-webhook-runtime)
+
 ## About this project
 
 This repository contains a generic Kubernetes admission webhook implementation framework.
