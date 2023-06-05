@@ -105,7 +105,7 @@ var _ = BeforeSuite(func() {
 			CertFile:    webhookInstallOptions.LocalServingCertDir + "/tls.crt",
 			KeyFile:     webhookInstallOptions.LocalServingCertDir + "/tls.key",
 		}
-		err = admission.Serve(ctx, options)
+		err := admission.Serve(ctx, options)
 		Expect(err).NotTo(HaveOccurred())
 	}()
 
