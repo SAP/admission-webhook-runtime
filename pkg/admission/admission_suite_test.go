@@ -42,6 +42,7 @@ var testEnv *envtest.Environment
 var cfg *rest.Config
 var ctx context.Context
 var cancel context.CancelFunc
+var threads sync.WaitGroup
 var clientset kubernetes.Interface
 var recorder *Recorder
 
@@ -87,7 +88,9 @@ var _ = BeforeSuite(func() {
 	// add further webhooks if needed
 
 	By("starting webhook server")
+	threads.Add(1)
 	go func() {
+		defer threads.Done()
 		defer GinkgoRecover()
 		options := &admission.ServeOptions{
 			BindAddress: fmt.Sprintf("%s:%d", webhookInstallOptions.LocalServingHost, webhookInstallOptions.LocalServingPort),
@@ -124,6 +127,7 @@ var _ = BeforeSuite(func() {
 var _ = AfterSuite(func() {
 	By("tearing down the test environment")
 	cancel()
+	threads.Wait()
 	err := testEnv.Stop()
 	Expect(err).NotTo(HaveOccurred())
 })
