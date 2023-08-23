@@ -11,6 +11,7 @@ test: envtest
 envtest: setupenvtest
 	@$(SETUPENVTEST) use --bin-dir $(BASEDIR)/envtest $(ENVTEST_K8S_VERSION)
 	@ENVTESTDIR=$$($(SETUPENVTEST) use --bin-dir $(BASEDIR)/envtest $(ENVTEST_K8S_VERSION) -p path) ;\
+	chmod -R u+w $$ENVTESTDIR ;\
 	rm -f $(BASEDIR)/envtest/current ;\
 	ln -s $$ENVTESTDIR $(BASEDIR)/envtest/current
 
