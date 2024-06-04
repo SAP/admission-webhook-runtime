@@ -1,6 +1,6 @@
 module github.com/sap/admission-webhook-runtime
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/go-logr/logr v1.4.2
