@@ -5,7 +5,7 @@ go 1.23.2
 require (
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.21.0
-	github.com/onsi/gomega v1.35.0
+	github.com/onsi/gomega v1.35.1
 	github.com/pkg/errors v0.9.1
 	gomodules.xyz/jsonpatch/v2 v2.4.0
 	k8s.io/api v0.31.2
