@@ -142,4 +142,4 @@ We as members, contributors, and leaders pledge to make participation in our com
 
 ## Licensing
 
-Copyright 2023 SAP SE or an SAP affiliate company and admission-webhook-runtime contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/SAP/admission-webhook-runtime).
+Copyright 2024 SAP SE or an SAP affiliate company and admission-webhook-runtime contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/SAP/admission-webhook-runtime).
