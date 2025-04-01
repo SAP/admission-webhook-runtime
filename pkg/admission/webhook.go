@@ -56,7 +56,7 @@ type Webhook[T runtime.Object] interface {
 
 // Webhook handler. Implements the http.Handler interface.
 type WebhookHandler struct {
-	admitFunc func(log logr.Logger, ctx context.Context, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse
+	admitFunc func(ctx context.Context, log logr.Logger, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse
 	log       logr.Logger
 }
 
@@ -80,7 +80,7 @@ func NewValidatingWebhookHandler[T runtime.Object](w ValidatingWebhook[T], schem
 	}
 
 	return &WebhookHandler{
-		admitFunc: func(log logr.Logger, ctx context.Context, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse {
+		admitFunc: func(ctx context.Context, log logr.Logger, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse {
 			var obj, oldObj T
 			if len(req.Object.Raw) > 0 {
 				object, _, err := decoder.Decode(req.Object.Raw, nil, nil)
@@ -210,7 +210,7 @@ func NewMutatingWebhookHandler[T runtime.Object](w MutatingWebhook[T], scheme *r
 	}
 
 	return &WebhookHandler{
-		admitFunc: func(log logr.Logger, ctx context.Context, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse {
+		admitFunc: func(ctx context.Context, log logr.Logger, req *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse {
 			var obj, oldObj T
 			if len(req.Object.Raw) > 0 {
 				object, _, err := decoder.Decode(req.Object.Raw, nil, nil)
@@ -344,10 +344,10 @@ func RegisterMutatingWebhook[T runtime.Object](w MutatingWebhook[T], scheme *run
 // scheme is ignored (can be passed as nil), and a pointer to unstructured.Unstructured will be passed to
 // the webhook implementation.
 func RegisterWebhookWithRouter[T runtime.Object](w Webhook[T], scheme *runtime.Scheme, log logr.Logger, router Router) error {
-	if err := RegisterValidatingWebhookWithRouter[T](w, scheme, log, router); err != nil {
+	if err := RegisterValidatingWebhookWithRouter(w, scheme, log, router); err != nil {
 		return err
 	}
-	if err := RegisterMutatingWebhookWithRouter[T](w, scheme, log, router); err != nil {
+	if err := RegisterMutatingWebhookWithRouter(w, scheme, log, router); err != nil {
 		return err
 	}
 	return nil
@@ -422,7 +422,7 @@ func handleHealthz(w http.ResponseWriter, r *http.Request) {
 	// return empty content
 }
 
-func handleAdmission(w http.ResponseWriter, r *http.Request, admitFunc func(logr.Logger, context.Context, *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse, log logr.Logger) {
+func handleAdmission(w http.ResponseWriter, r *http.Request, admitFunc func(context.Context, logr.Logger, *admissionv1.AdmissionRequest) *admissionv1.AdmissionResponse, log logr.Logger) {
 	var body []byte
 
 	if r.Body == nil {
@@ -468,7 +468,7 @@ func handleAdmission(w http.ResponseWriter, r *http.Request, admitFunc func(logr
 	responseAdmissionReview := admissionv1.AdmissionReview{}
 	responseAdmissionReview.APIVersion = requestedAdmissionReview.APIVersion
 	responseAdmissionReview.Kind = requestedAdmissionReview.Kind
-	responseAdmissionReview.Response = admitFunc(log, logr.NewContext(context.Background(), log), requestedAdmissionReview.Request)
+	responseAdmissionReview.Response = admitFunc(logr.NewContext(contextWithAdmissionRequest(r.Context(), requestedAdmissionReview.Request), log), log, requestedAdmissionReview.Request)
 	responseAdmissionReview.Response.UID = requestedAdmissionReview.Request.UID
 
 	log.V(5).Info("admission response", "response", responseAdmissionReview.Response)
