@@ -344,10 +344,10 @@ func RegisterMutatingWebhook[T runtime.Object](w MutatingWebhook[T], scheme *run
 // scheme is ignored (can be passed as nil), and a pointer to unstructured.Unstructured will be passed to
 // the webhook implementation.
 func RegisterWebhookWithRouter[T runtime.Object](w Webhook[T], scheme *runtime.Scheme, log logr.Logger, router Router) error {
-	if err := RegisterValidatingWebhookWithRouter[T](w, scheme, log, router); err != nil {
+	if err := RegisterValidatingWebhookWithRouter(w, scheme, log, router); err != nil {
 		return err
 	}
-	if err := RegisterMutatingWebhookWithRouter[T](w, scheme, log, router); err != nil {
+	if err := RegisterMutatingWebhookWithRouter(w, scheme, log, router); err != nil {
 		return err
 	}
 	return nil
@@ -468,7 +468,7 @@ func handleAdmission(w http.ResponseWriter, r *http.Request, admitFunc func(logr
 	responseAdmissionReview := admissionv1.AdmissionReview{}
 	responseAdmissionReview.APIVersion = requestedAdmissionReview.APIVersion
 	responseAdmissionReview.Kind = requestedAdmissionReview.Kind
-	responseAdmissionReview.Response = admitFunc(log, logr.NewContext(context.Background(), log), requestedAdmissionReview.Request)
+	responseAdmissionReview.Response = admitFunc(log, logr.NewContext(contextWithAdmissionRequest(r.Context(), requestedAdmissionReview.Request), log), requestedAdmissionReview.Request)
 	responseAdmissionReview.Response.UID = requestedAdmissionReview.Request.UID
 
 	log.V(5).Info("admission response", "response", responseAdmissionReview.Response)
