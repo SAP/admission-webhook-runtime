@@ -31,3 +31,12 @@ GOBIN=$(BASEDIR)/bin go install $(2) ;\
 rm -rf $$TMP_DIR ;\
 }
 endef
+
+# Set the year for SPDX header updates (default: current year)
+
+YEAR ?= $(shell date +%Y)
+
+.PHONY: update-go-header-year
+update-go-header-year:
+	@find . -name "*.go" -type f -exec sed -i \
+	"s/^SPDX-FileCopyrightText: [0-9]\{4\} SAP SE or an SAP affiliate company and admission-webhook-runtime contributors/SPDX-FileCopyrightText: $(YEAR) SAP SE or an SAP affiliate company and admission-webhook-runtime contributors/" {} +
