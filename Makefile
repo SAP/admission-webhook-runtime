@@ -35,9 +35,9 @@ endef
 # Set the year for SPDX header updates (default: current year)
 YEAR ?= $(shell date +%Y)
 
-.PHONY: update-go-header-year
-update-go-header-year:
-    # Go + TXT + MD
+.PHONY: update-header-year
+update-header-year:
+    # Go + TXT
 	@find . -type f \( -name "*.go" -o -name "*.txt" -o -name "*.md" \) -exec sed -i \
 	's/^SPDX-FileCopyrightText: [0-9]\{4\}\( SAP SE or an SAP affiliate company and [^"]\+ contributors\)/SPDX-FileCopyrightText: $(YEAR)\1/' {} +
 
