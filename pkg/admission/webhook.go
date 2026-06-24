@@ -17,7 +17,7 @@ import (
 
 	"github.com/go-logr/logr"
 	"github.com/pkg/errors"
-	jsonpatch "gomodules.xyz/jsonpatch/v2"
+	jsonpatch "gomodules.xyz/jsonpatch/v3"
 	admissionv1 "k8s.io/api/admission/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
